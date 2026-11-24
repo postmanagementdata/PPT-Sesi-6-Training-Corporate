@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Sesi 6 — Integrated Formulas &amp; Automated BQ | Post Management Data</title>
+<style>
+:root{--ink:#2d211b;--brown:#4b3024;--copper:#b77e4d;--gold:#d5ae7c;--cream:#f6efe4;--paper:#fffaf2;--muted:#77685d;--green:#5f7d62;--red:#a84f43;--line:#e2d4c2;--shadow:0 24px 70px rgba(34,23,17,.24)}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:#211914;color:var(--ink);font-family:Arial,Helvetica,sans-serif;overflow:hidden}
+#stage{height:100vh;width:100vw;display:grid;place-items:center;padding:32px 26px 72px}
+.slide{display:none;width:min(100%,calc((100vh - 120px)*1.7778));aspect-ratio:16/9;background:var(--cream);box-shadow:var(--shadow);overflow:hidden;position:relative;border-radius:7px}
+.slide.active{display:block}.slide-inner{height:100%;padding:5.1% 6.1% 4.1%;display:flex;flex-direction:column;position:relative}
+.slide:before{content:"";position:absolute;inset:0 auto 0 0;width:10px;background:var(--copper)}
+.slide-kicker,.eyebrow{font-size:clamp(9px,.82vw,15px);font-weight:700;letter-spacing:.14em;color:var(--copper);text-transform:uppercase}
+h1{font-family:Georgia,serif;font-size:clamp(30px,3.2vw,62px);line-height:1.08;max-width:840px;color:var(--paper);margin:26px 0 18px;letter-spacing:-.025em}
+h2{font-family:Georgia,serif;font-size:clamp(25px,2.5vw,46px);line-height:1.12;color:var(--ink);margin:20px 0 26px;max-width:1060px;letter-spacing:-.018em}
+h3{margin:0 0 7px;font-size:clamp(13px,1.1vw,20px)}p{margin:0;line-height:1.42}small{font-size:clamp(9px,.75vw,14px);color:var(--muted)}
+.slide-footer{position:absolute;bottom:2.5%;left:6.1%;right:6.1%;display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:9px;color:#8a7b6d;font-size:clamp(8px,.65vw,12px);letter-spacing:.11em;font-weight:700}
+.slide.cover{background:var(--ink);color:var(--paper)}.cover:before{width:12px}.cover .slide-inner{padding:7% 7% 5%}.cover-grid{display:grid;grid-template-columns:1.6fr .8fr;align-items:center;gap:30px;height:100%}.cover .eyebrow{color:var(--gold)}.cover .subtitle{font-size:clamp(16px,1.35vw,25px);color:#eadbc6;margin:0 0 28px}.chips{display:flex;gap:9px;flex-wrap:wrap}.chip{border:1px solid #80664e;color:#f4e5d1;padding:9px 13px;border-radius:999px;font-size:clamp(10px,.8vw,15px)}.brandline{position:absolute;bottom:3.4%;font-size:clamp(9px,.7vw,13px);letter-spacing:.16em;color:#c6a17a;font-weight:700}.brandline span{color:#e1bb8e;margin:0 10px}.cover-mark{display:grid;justify-items:center;gap:18px}.mark-ring{width:min(20vw,240px);aspect-ratio:1;border:2px solid #b88b5f;border-radius:50%;display:grid;place-items:center;position:relative}.mark-ring:before,.mark-ring:after{content:"";position:absolute;border:1px solid #765a43;border-radius:50%;inset:13px}.mark-ring:after{inset:27px}.mark-ring span{font-family:Georgia,serif;font-size:clamp(32px,4vw,72px);color:#f0d9bc;letter-spacing:.12em}.mark-caption{text-align:center;line-height:1.5;letter-spacing:.22em;color:#bda082;font-size:clamp(9px,.75vw,14px)}.cover .slide-footer{display:none}
+.slide-content{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}.panel{padding:26px 30px;border-radius:6px;min-height:270px}.panel.pale{background:#eadcc9}.panel.dark{background:var(--brown);color:#fff7eb}.panel-tag{font-size:clamp(10px,.8vw,14px);letter-spacing:.1em;font-weight:700;margin-bottom:17px;color:var(--copper)}.panel.dark .panel-tag{color:#e1b27b}ul,ol{padding-left:22px;margin:0}li{margin:11px 0;font-size:clamp(14px,1.1vw,21px);line-height:1.3}.panel.dark li{color:#f8ecdc}
+.outcomes{display:grid;grid-template-columns:1fr 1fr;gap:15px 22px}.outcome{display:flex;gap:16px;align-items:flex-start;background:var(--paper);padding:18px 20px;border:1px solid var(--line);border-radius:5px}.num{font-family:Georgia,serif;font-size:30px;color:var(--copper)}.outcome p{color:var(--muted);font-size:clamp(12px,.95vw,18px)}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:stretch}.flow-step{background:var(--paper);border:1px solid var(--line);border-top:5px solid var(--copper);padding:18px 14px;border-radius:4px;position:relative}.flow-num{color:var(--copper);font-weight:700;letter-spacing:.12em;font-size:13px;margin-bottom:17px}.flow-step h3{font-family:Georgia,serif;font-size:clamp(13px,1.15vw,21px)}.flow-step p{font-size:clamp(10px,.83vw,16px);color:var(--muted)}
+.table-wrap{background:var(--paper);border:1px solid var(--line);border-radius:5px;overflow:hidden}table{border-collapse:collapse;width:100%;font-size:clamp(11px,.9vw,17px)}th{background:var(--brown);color:#fff2df;text-align:left;font-weight:700}td,th{padding:13px 15px;border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}.stat-callout{margin-top:20px;background:#e8ddcc;padding:17px 22px;text-align:center;color:var(--brown);font-size:clamp(16px,1.5vw,28px);font-family:Georgia,serif;font-weight:700;border-left:5px solid var(--copper)}
+.filter-board{background:var(--paper);border:1px solid var(--line);padding:26px;border-radius:6px}.filter-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.filter-field label{display:block;font-size:clamp(11px,.85vw,16px);font-weight:700;color:var(--muted);margin-bottom:9px}.fake-input{padding:16px 15px;border:1px solid #d6c4ad;border-radius:4px;background:#fff;color:var(--ink);font-weight:700;font-size:clamp(16px,1.3vw,24px)}.rule-box{margin-top:23px;background:#e9efe6;padding:17px 20px;display:flex;gap:14px;align-items:center;border-radius:4px}.rule-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:var(--green);color:white;font-weight:700}.rule-box p{font-size:clamp(13px,1.1vw,20px);color:#314b35}
+.formula-layout{display:grid;grid-template-columns:1.4fr .75fr;gap:20px;align-items:center}.code{font-family:Consolas,"Courier New",monospace;background:#2a211d;color:#faead6;border-radius:5px;padding:16px 18px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:clamp(10px,.78vw,14px);line-height:1.45;margin:0}.formula-code{font-size:clamp(9px,.72vw,13px)}.formula-points{background:#eadcc9;padding:20px 20px 20px 38px;border-radius:5px}.formula-points li{font-size:clamp(12px,.92vw,17px);margin:10px 0}.result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.result-card{background:var(--paper);border:1px solid var(--line);padding:20px 16px;text-align:center;border-radius:5px}.result-label{font-family:Georgia,serif;font-size:clamp(17px,1.35vw,25px);font-weight:700;color:var(--brown)}.result-card p{font-size:clamp(10px,.8vw,15px);color:var(--muted);margin:10px 0 15px}.result-card strong{font-size:clamp(17px,1.35vw,25px);color:var(--green)}.result-foot{margin-top:20px;text-align:center;color:var(--copper);font-size:clamp(12px,.95vw,18px);font-weight:700}
+.lookup-route{display:grid;grid-template-columns:1fr .75fr 1fr;gap:14px;align-items:center}.route-box{background:#eadcc9;padding:20px;border-radius:5px;min-height:115px;display:flex;flex-direction:column;justify-content:center;gap:8px}.route-box small{letter-spacing:.11em;font-weight:700}.route-box strong{font-family:Georgia,serif;font-size:clamp(17px,1.5vw,27px)}.route-box.highlight{background:var(--brown);color:#fff2df}.route-box.highlight small{color:#d7b183}.route-arrow{display:grid;justify-items:center;gap:8px;color:var(--copper);font-weight:700;font-size:clamp(13px,1vw,18px)}.route-arrow span{font-size:34px}.output-pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0}.output-pill{background:#e7eee4;color:#35543a;padding:8px 14px;border-radius:99px;font-size:clamp(10px,.78vw,14px);font-weight:700}.compact{font-size:clamp(10px,.76vw,14px);padding:12px 16px}
+.calc-layout{display:grid;grid-template-columns:.8fr 1.2fr;gap:18px}.calc-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.calc-facts>div{background:var(--paper);border:1px solid var(--line);padding:14px;border-radius:5px;display:flex;flex-direction:column;gap:6px}.calc-facts strong{font-size:clamp(13px,1vw,19px)}.calc-results{display:grid;grid-template-columns:1fr 1fr;gap:10px}.calc-results>div{background:var(--brown);color:#fff0dc;padding:18px;border-radius:5px;display:flex;flex-direction:column;gap:10px}.calc-results small{color:#d7b183}.calc-results strong{font-family:Georgia,serif;font-size:clamp(21px,1.8vw,34px)}.calc-results span{color:#eadbc6;font-size:clamp(10px,.8vw,15px)}.formula-strip{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:15px}.formula-strip>div{background:#eadcc9;padding:13px 16px;border-radius:4px;display:flex;justify-content:space-between;gap:10px}.formula-strip span{font-weight:700;color:var(--brown)}
+.status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:17px}.status-card{padding:18px;border-radius:5px;min-height:110px}.status-card strong{font-size:clamp(17px,1.4vw,26px)}.status-card p{margin-top:8px;font-size:clamp(11px,.88vw,16px)}.status-card.good{background:#e3ede0;color:#34533a}.status-card.warn{background:#f5e5df;color:#83453b}.status-card.neutral{background:#e9e3da;color:#675b51}
+.summary-list{display:flex;flex-direction:column;gap:10px}.summary-list article{display:grid;grid-template-columns:1fr 100px;gap:10px;align-items:center;background:var(--paper);border:1px solid var(--line);padding:12px 15px;border-radius:4px}.summary-list strong{display:block;margin-bottom:7px;font-size:clamp(12px,.95vw,17px)}.summary-list .code{font-size:clamp(9px,.7vw,13px);padding:9px 12px}.summary-list article>span{color:var(--copper);font-weight:700;text-align:center}
+.test-list{display:flex;flex-direction:column;gap:9px}.test-list article{display:grid;grid-template-columns:1fr 1.3fr 1.2fr;gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);padding:14px 16px;border-radius:4px;font-size:clamp(11px,.9vw,17px)}.test-name{font-weight:700}.test-action{color:var(--muted)}.test-result{color:var(--green);font-weight:700}
+.practice-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.roles{display:grid;grid-template-columns:1fr 1fr;gap:10px}.roles article{display:flex;gap:12px;align-items:flex-start;background:var(--paper);padding:12px;border:1px solid var(--line);border-radius:4px}.role-no{font-family:Georgia,serif;color:var(--copper);font-size:22px}.roles b{font-size:clamp(11px,.9vw,16px)}.roles p{font-size:clamp(10px,.78vw,14px);color:var(--muted);margin-top:5px}.task-panel{background:var(--brown);color:#fff0dc;padding:22px;border-radius:5px}.task-panel h3{color:#d7b183;letter-spacing:.12em;margin-bottom:15px}.task-panel li{font-size:clamp(11px,.9vw,17px);margin:9px 0}
+.closing-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}.takeaways{display:flex;flex-direction:column;gap:16px}.takeaways>div{display:flex;gap:13px;align-items:center;font-size:clamp(14px,1.1vw,20px);font-weight:700}.takeaways span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--green);color:white}.next-card{background:var(--brown);color:#fff0dc;padding:26px;border-radius:5px;display:flex;flex-direction:column;gap:12px}.next-card small{color:#d7b183;letter-spacing:.1em}.next-card strong{font-family:Georgia,serif;font-size:clamp(22px,2vw,36px);line-height:1.2}
+.controls{position:fixed;bottom:17px;left:24px;right:24px;display:flex;align-items:center;gap:12px;color:#e8d9c7}.controls button{background:#4b392d;border:1px solid #80634b;color:#fff2df;padding:9px 13px;border-radius:5px;font-size:13px;cursor:pointer}.controls button:hover{background:#684b36}.progress{height:5px;background:#57463a;flex:1;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:#c99562;width:0;transition:width .2s}.counter{font-variant-numeric:tabular-nums;min-width:60px;text-align:center;font-size:13px}.note-panel{position:fixed;right:20px;bottom:65px;width:min(420px,90vw);background:#fff9ef;color:var(--ink);box-shadow:var(--shadow);padding:18px 20px;border-radius:6px;border:1px solid var(--line);display:none;z-index:5}.note-panel.show{display:block}.note-panel h3{font-family:Georgia,serif;color:var(--copper);margin-bottom:9px}.note-panel p{font-size:14px;line-height:1.5}.hint{font-size:11px;color:#cdbda9}
+@media(max-width:900px){#stage{padding:12px 8px 70px}.slide-inner{padding:4.5% 5%}.flow{gap:6px}.flow-step{padding:11px 8px}.flow-step p{font-size:10px}.panel{padding:16px}.slide h2{margin:12px 0 15px}}
+@media print{@page{size:landscape;margin:0}body{background:white;overflow:visible}#stage{display:block;height:auto;padding:0}.slide{display:block!important;width:13.333in;height:7.5in;aspect-ratio:auto;border-radius:0;box-shadow:none;page-break-after:always}.controls,.note-panel{display:none!important}.speaker-note{display:none!important}}
+
+.problem-link,.sheet-cta{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#b77e4d;border:1px solid #d5ae7c;color:#fffaf2!important;text-decoration:none;padding:9px 13px;border-radius:5px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer}.problem-link:hover,.sheet-cta:hover{background:#96633d}.sheet-cta{margin-top:8px;align-self:flex-start;font-size:clamp(11px,.85vw,15px);padding:10px 14px}.next-card{align-items:flex-start}.controls .problem-link{margin-left:2px}.hint{white-space:nowrap}@media(max-width:900px){.controls{left:8px;right:8px;gap:6px}.controls button,.problem-link{padding:7px 8px;font-size:11px}.counter{min-width:46px}.hint{display:none}}
+</style>
+<style>
+/* Session 5-style presentation shell: responsive, scrollable slides, fixed navigation */
+html, body { min-height:100%; height:auto; margin:0; }
+body { min-height:100vh; display:flex; flex-direction:column; overflow-x:hidden; overflow-y:hidden; }
+button { font:inherit; }
+.topbar { min-height:58px; flex:0 0 auto; padding:0 22px; color:#f9eee2; display:flex; align-items:center; justify-content:space-between; gap:14px; border-bottom:1px solid rgba(255,255,255,.12); background:rgba(26,18,14,.92); }
+.brand { display:flex; align-items:center; gap:11px; min-width:0; }
+.brand-mark { width:33px; height:33px; flex:0 0 auto; border:1px solid rgba(235,190,137,.8); border-radius:10px; display:grid; place-items:center; color:#e9b982; font-weight:800; font-size:13px; letter-spacing:-.08em; }
+.brand-copy { min-width:0; }
+.brand-title { font-size:12px; letter-spacing:.16em; font-weight:800; white-space:nowrap; }
+.brand-sub { margin-top:2px; font-size:10px; color:#c5b4a8; letter-spacing:.08em; text-transform:uppercase; }
+.top-actions { display:flex; align-items:center; gap:8px; }
+.quiet-btn { border:1px solid rgba(255,255,255,.19); background:transparent; color:#f9eee2; border-radius:9px; padding:8px 11px; font-size:11px; cursor:pointer; transition:.2s; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; white-space:nowrap; }
+.quiet-btn:hover, .quiet-btn:focus-visible { background:rgba(255,255,255,.1); outline:none; }
+.worksheet-link { border-color:rgba(197,141,85,.7); color:#f3cfaa; }
+main { flex:1 1 auto; min-height:0; display:grid; place-items:center; padding:18px 18px; position:relative; }
+.presentation { width:min(100%,1120px); aspect-ratio:16/9; max-height:calc(100vh - 142px); min-height:420px; position:relative; background:var(--cream); border-radius:16px; overflow:hidden; box-shadow:0 22px 70px rgba(22,14,10,.22); }
+/* A slide can scroll vertically when its content is taller than the viewing frame. */
+.slide { display:block; position:absolute; inset:0; width:100%; height:100%; aspect-ratio:auto; padding:0; overflow-x:hidden; overflow-y:auto; -webkit-overflow-scrolling:touch; opacity:0; transform:translateX(24px); pointer-events:none; transition:opacity .3s ease, transform .3s ease; background:radial-gradient(ellipse at 100% 0%,rgba(197,141,85,.09),transparent 32%),var(--cream); border-radius:16px; }
+.slide.active { display:block; opacity:1; transform:translateX(0); pointer-events:auto; z-index:1; }
+.slide.exit-left { transform:translateX(-24px); }
+.slide-inner { height:auto; min-height:100%; padding:5.1% 6.1% 3.2%; display:flex; flex-direction:column; position:relative; }
+.slide-content { flex:0 0 auto; min-height:auto; display:flex; flex-direction:column; justify-content:flex-start; }
+.slide-footer { position:relative; bottom:auto; left:auto; right:auto; margin-top:26px; padding-top:9px; flex:0 0 auto; }
+.slide.cover .slide-inner { height:100%; min-height:100%; }
+.slide.cover .slide-content { flex:1 0 auto; justify-content:center; }
+.slide.cover .slide-footer { display:none; }
+.speaker-note { display:none !important; }
+.controls { min-height:64px; flex:0 0 auto; color:#f1e2d5; padding:10px 22px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-top:1px solid rgba(255,255,255,.12); background:rgba(26,18,14,.92); }
+.progress-wrap { display:flex; align-items:center; gap:12px; flex:1; max-width:390px; min-width:120px; }
+.progress-track { height:3px; background:rgba(255,255,255,.18); border-radius:20px; flex:1; overflow:hidden; }
+.progress-fill { height:100%; width:0; background:#c58d55; transition:width .25s ease; }
+.counter { font-size:11px; color:#cbb9aa; min-width:48px; font-variant-numeric:tabular-nums; }
+.navs { display:flex; gap:8px; align-items:center; }
+.nav-btn { background:#c58d55; color:#241812; border:0; border-radius:10px; width:40px; height:38px; display:grid; place-items:center; cursor:pointer; font-size:18px; font-weight:800; }
+.nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+.keyboard-hint { font-size:10px; color:#ad9b8c; white-space:nowrap; }
+.note-pop { position:fixed; inset:0; z-index:30; display:none; background:rgba(11,8,6,.58); padding:18px; align-items:center; justify-content:center; }
+.note-pop.open { display:flex; }
+.note-card { width:min(680px,100%); max-height:82vh; overflow:auto; background:#fffdf9; color:#30241e; border-radius:16px; padding:24px; box-shadow:0 22px 70px rgba(22,14,10,.22); }
+.note-head { display:flex; align-items:center; justify-content:space-between; gap:15px; }
+.note-head h3 { font:19px Georgia,serif; color:#493126; }
+.note-card p { font-size:13px; line-height:1.65; color:#66574c; }
+.note-card .quiet-btn { color:#493126; border-color:#e7d9c9; }
+#outlineList { max-height:65vh; overflow:auto; }
+.outline-item { display:block; width:100%; text-align:left; padding:11px 12px; margin:5px 0; border:1px solid #e7d9c9; border-radius:8px; background:#fffdf9; color:#493126; cursor:pointer; font-size:12px; }
+.outline-item:hover, .outline-item:focus-visible { background:#f5ead9; outline:none; }
+@media (max-width:900px) {
+  main { padding:12px 8px; }
+  .presentation { width:min(100%,1120px); }
+  .slide-inner { padding:4.5% 5% 3.5%; }
+  .flow { gap:6px; }
+  .flow-step { padding:11px 8px; }
+  .panel { padding:16px; }
+  .slide h2 { margin:12px 0 15px; }
+}
+@media (max-width:720px) {
+  .topbar { min-height:54px; padding:8px 12px; align-items:flex-start; flex-wrap:wrap; }
+  .brand-sub, .keyboard-hint { display:none; }
+  .brand-title { font-size:10px; letter-spacing:.1em; }
+  .top-actions { flex-wrap:wrap; justify-content:flex-start; }
+  .quiet-btn { padding:7px 9px; font-size:10px; }
+  main { padding:10px 8px; }
+  .presentation { aspect-ratio:auto; height:min(70vh,760px); min-height:460px; max-height:none; border-radius:12px; }
+  .slide { border-radius:12px; }
+  .slide-inner { min-height:100%; padding:24px 21px 30px; }
+  .slide.cover .slide-inner { height:auto; min-height:100%; }
+  .slide.cover .cover-grid { grid-template-columns:1fr; gap:12px; }
+  .cover-mark { display:none; }
+  .slide h1 { font-size:clamp(30px,8vw,42px); }
+  .slide h2 { font-size:clamp(25px,6vw,34px); }
+  .two-col, .lookup-route, .calc-layout, .formula-layout, .closing-layout, .practice-layout { grid-template-columns:1fr !important; gap:12px; }
+  .flow { grid-template-columns:1fr !important; gap:7px; }
+  .flow-arrow { transform:rotate(90deg); text-align:center; }
+  .filter-fields { grid-template-columns:1fr !important; gap:10px; }
+  .result-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .status-grid { grid-template-columns:1fr; }
+  .test-list article { grid-template-columns:1fr; gap:5px; }
+  .roles { grid-template-columns:1fr; }
+  .controls { min-height:58px; padding:9px 12px; gap:8px; }
+  .progress-wrap { max-width:unset; min-width:0; }
+  .nav-btn { width:37px; height:35px; }
+  .note-card { padding:18px; }
+}
+@media (max-height:650px) and (min-width:721px) {
+  main { padding:10px 16px; }
+  .presentation { max-height:calc(100vh - 124px); min-height:360px; }
+  .slide-inner { padding-top:3.8%; padding-bottom:2.5%; }
+}
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none !important; scroll-behavior:auto !important; } }
+@media print {
+  @page { size:landscape; margin:0; }
+  html,body { background:#fff; min-height:0; height:auto; overflow:visible; }
+  .topbar,.controls,.note-pop { display:none !important; }
+  main { display:block; padding:0; }
+  .presentation { width:100%; max-height:none; min-height:0; height:auto; aspect-ratio:auto; border-radius:0; overflow:visible; box-shadow:none; }
+  .slide,.slide.active { position:relative; inset:auto; opacity:1; transform:none; pointer-events:auto; display:block !important; width:100%; height:auto; min-height:56.25vw; aspect-ratio:auto; overflow:visible; border-radius:0; box-shadow:none; page-break-after:always; }
+  .slide-inner { min-height:56.25vw; }
+  .speaker-note { display:none !important; }
+}
+</style>
+<style>
+/* Match the typography and warm visual language of the Session 5 deck. */
+:root {
+  --espresso:#281c17; --coffee:#493126; --brown:#6a4734; --copper:#c58d55; --gold:#d5ae7c;
+  --cream:#f8f2e9; --paper:#fffdf9; --ink:#30241e; --muted:#82756b;
+  --green:#5f7d62; --red:#a84f43; --line:#e7d9c9; --shadow:0 22px 70px rgba(22,14,10,.22);
+}
+html,body { background:var(--espresso); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+body { background:var(--espresso); }
+.slide { background:radial-gradient(ellipse at 100% 0%,rgba(197,141,85,.09),transparent 32%),var(--cream); }
+.slide:not(.cover)::before { display:none; }
+.slide-inner { padding:clamp(28px,4.1vw,56px) clamp(28px,4.8vw,64px) 58px; }
+.slide-kicker, .eyebrow { display:inline-flex; align-items:center; gap:9px; color:var(--brown); font-size:10px; letter-spacing:.18em; text-transform:uppercase; font-weight:800; margin-bottom:13px; }
+.slide-kicker::before, .eyebrow::before { content:""; width:24px; height:2px; background:var(--caramel); flex:0 0 auto; }
+h1,h2,h3,p { margin-top:0; }
+h1 { font-family:Georgia,"Times New Roman",serif; font-weight:500; font-size:clamp(36px,5vw,66px); letter-spacing:-.045em; line-height:1.02; margin-bottom:20px; }
+h2 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(28px,3.4vw,42px); line-height:1.1; letter-spacing:-.035em; font-weight:500; margin:0 0 14px; max-width:980px; }
+h3 { font-size:15px; line-height:1.25; margin-bottom:8px; color:var(--coffee); }
+p { color:#66574c; line-height:1.55; font-size:clamp(12px,1.1vw,14px); }
+.slide.cover { background:linear-gradient(120deg,rgba(40,28,23,.99),rgba(73,49,38,.97)); color:var(--cream); }
+.slide.cover::before { content:""; position:absolute; inset:auto; width:50%; aspect-ratio:1; right:-12%; top:-25%; border-radius:50%; border:1px solid rgba(223,176,126,.28); box-shadow:0 0 0 34px rgba(223,176,126,.04),0 0 0 74px rgba(223,176,126,.035),0 0 0 125px rgba(223,176,126,.025); display:block; }
+.slide.cover::after { content:""; position:absolute; right:12%; bottom:15%; width:19%; height:29%; border:1px solid rgba(223,176,126,.3); border-radius:48% 48% 8px 8px; transform:rotate(14deg); }
+.slide.cover .slide-inner { padding:7% 7% 5%; }
+.slide.cover .slide-kicker { display:none; }
+.slide.cover .slide-content { justify-content:flex-start; }
+.slide.cover .cover-grid { display:block; height:auto; min-height:0; }
+.slide.cover .cover-mark { display:none; }
+.slide.cover .eyebrow { color:#e9bc8e; margin-bottom:14px; }
+.slide.cover h1 { color:var(--cream); max-width:760px; position:relative; z-index:1; }
+.slide.cover .subtitle { font-size:clamp(15px,1.55vw,18px); line-height:1.55; color:#d8c8ba; max-width:620px; margin:0 0 24px; }
+.slide.cover .chips { position:relative; z-index:1; margin-top:8px; }
+.slide.cover .chip { border-color:rgba(255,255,255,.18); color:#e8d9ca; }
+.slide.cover .brandline { position:absolute; left:7%; bottom:27px; color:#bba697; font-size:10px; letter-spacing:.14em; text-transform:uppercase; }
+.slide-footer { position:absolute; bottom:20px; right:27px; left:auto; border:0; padding:0; margin:0; color:#a59484; font-size:10px; letter-spacing:.16em; font-weight:700; }
+.slide-footer span:first-child { display:none; }
+.slide-footer span:last-child { display:block; }
+.cover .slide-footer { display:none; }
+/* softer, rounded panels similar to Session 5 */
+.panel, .flow-step, .outcome, .result-card, .status-card, .route-box, .filter-board, .table-wrap, .test-list article, .roles article { border-radius:12px; }
+.panel.pale { background:#eadcc9; }
+.panel.dark { background:var(--coffee); }
+.flow-step { border-top-color:var(--caramel); }
+.code { border-radius:9px; }
+@media(max-width:720px) {
+  .slide-inner { padding:26px 21px 58px; }
+  .slide.cover .slide-inner { padding:9% 7% 50px; }
+  .slide.cover h1 { font-size:clamp(34px,9vw,46px); }
+  .slide-footer { bottom:16px; right:18px; }
+}
+</style>
+<style>
+.slide.cover::before { background:transparent !important; }
+@media(max-width:720px) { .formula-strip { grid-template-columns:1fr !important; } .formula-strip>div { flex-direction:column; align-items:flex-start; } .formula-strip span { overflow-wrap:anywhere; } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand" aria-label="Post Management Data">
+    <div class="brand-mark">PMD</div>
+    <div class="brand-copy"><div class="brand-title">POST MANAGEMENT DATA</div><div class="brand-sub">Corporate Excel Training · IFM Operations</div></div>
+  </div>
+  <div class="top-actions">
+    <button class="quiet-btn" id="outlineBtn" type="button">Daftar materi</button>
+    <a class="quiet-btn worksheet-link" id="worksheetBtn" href="https://docs.google.com/spreadsheets/d/19q3t8mzQHIiDJ8Y5G79DOY054o9FGVw9/edit?usp=sharing&amp;ouid=113453549576979377139&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer" title="Buka workbook latihan peserta Sesi 6">Buka Soal Sesi 6 ↗</a>
+    <button class="quiet-btn" id="notesBtn" type="button">Catatan tutor</button>
+    <button class="quiet-btn" id="fullscreenBtn" type="button">⛶ Layar penuh</button>
+  </div>
+</header>
+<main>
+  <div class="presentation" id="presentation" aria-label="Presentasi Sesi 6" aria-live="polite">
+<section data-title="Dari daftar permintaan, kita bangun Draft BQ yang terintegrasi." aria-label="Slide 1" class="slide cover" data-index="0"><div class="slide-inner"><div class="slide-kicker">POST MANAGEMENT DATA  •  CORPORATE EXCEL TRAINING</div><div class="slide-content"><div class="cover-grid"><div><div class="eyebrow">POST MANAGEMENT DATA  •  CORPORATE EXCEL TRAINING</div><h1>Dari daftar permintaan, kita bangun Draft BQ yang terintegrasi.</h1><p class="subtitle">Sesi 6 — Integrated Formulas &amp; Automated BQ</p><div class="chips"><span class="chip">FILTER</span><span class="chip">XLOOKUP</span><span class="chip">IF / IFERROR</span><span class="chip">SUMIFS</span></div><div class="brandline">POST MANAGEMENT DATA <span>•</span> IFM OPERATIONS</div></div><div class="cover-mark"><div class="mark-ring"><span>PMD</span></div><div class="mark-caption">FROM REQUEST<br/>TO AUTOMATED BQ</div></div></div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  01</span></div></div><div class="speaker-note" hidden="">Pembuka: hari ini kita tidak mempelajari rumus secara terpisah. Kita menggabungkan keterampilan dari sesi sebelumnya untuk membuat alur kerja BQ yang lebih otomatis.</div></section>
+<section data-title="Sesi 5 mengajarkan cara mengambil data; Sesi 6 mengolahnya menjadi BQ." aria-label="Slide 2" class="slide compare" data-index="1"><div class="slide-inner"><div class="slide-kicker">JEMBATAN DARI SESI 5</div><h2>Sesi 5 mengajarkan cara mengambil data; Sesi 6 mengolahnya menjadi BQ.</h2><div class="slide-content"><div class="two-col"><article class="panel pale"><div class="panel-tag">SESI 5  •  SUDAH DIPELAJARI</div><ul><li>FILTER satu / beberapa kriteria</li><li>UNIQUE untuk daftar kategori unik</li><li>SORT untuk mengurutkan hasil</li><li>Dynamic Array &amp; Spill Range</li></ul></article><article class="panel dark"><div class="panel-tag">SESI 6  •  KITA KEMBANGKAN</div><ul><li>FILTER berdasarkan status dan tanggal</li><li>XLOOKUP mengambil informasi Master Item</li><li>IF / IFERROR memeriksa hasil</li><li>Perhitungan BQ dan rekap SUMIFS</li></ul></article></div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  02</span></div></div><div class="speaker-note" hidden="">Hubungkan dengan pengalaman mereka: latihan Sesi 5 sudah selesai. Hari ini prinsip FILTER yang sama digunakan untuk memilih request yang boleh diproses. Setelah itu, hasilnya dilengkapi dengan informasi Master Item dan dihitung menjadi BQ.</div></section>
+<section data-title="Peserta mampu mengikuti alur dari Raw Request hingga Draft BQ." aria-label="Slide 3" class="slide outcomes" data-index="2"><div class="slide-inner"><div class="slide-kicker">TARGET HARI INI</div><h2>Peserta mampu mengikuti alur dari Raw Request hingga Draft BQ.</h2><div class="slide-content"><div class="outcomes"><article class="outcome"><div class="num">01</div><div><h3>Memilih request</h3><p>Gunakan status dan rentang tanggal.</p></div></article><article class="outcome"><div class="num">02</div><div><h3>Mengambil data master</h3><p>Gunakan XLOOKUP untuk mencocokkan nama item.</p></div></article><article class="outcome"><div class="num">03</div><div><h3>Menghitung BQ</h3><p>Hitung investasi dan estimasi alokasi bulanan.</p></div></article><article class="outcome"><div class="num">04</div><div><h3>Memeriksa dan merekap</h3><p>Gunakan IF dan SUMIFS untuk membaca hasil.</p></div></article></div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  03</span></div></div><div class="speaker-note" hidden="">Tekankan bahwa targetnya bukan menghafal rumus. Targetnya memahami alasan setiap tahap dibutuhkan dalam proses operasional.</div></section>
+<section data-title="Setiap tahap menyiapkan data untuk tahap berikutnya." aria-label="Slide 4" class="slide flow" data-index="3"><div class="slide-inner"><div class="slide-kicker">ALUR KERJA</div><h2>Setiap tahap menyiapkan data untuk tahap berikutnya.</h2><div class="slide-content">
+<div class="flow">
+<article class="flow-step"><div class="flow-num">01</div><h3>RAW REQUEST</h3><p>17 permintaan barang</p></article>
+<article class="flow-step"><div class="flow-num">02</div><h3>FILTER &amp; VALIDASI</h3><p>Status + tanggal</p></article>
+<article class="flow-step"><div class="flow-num">03</div><h3>MASTER ITEM</h3><p>Kategori + harga standar</p></article>
+<article class="flow-step"><div class="flow-num">04</div><h3>AUTOMATED BQ</h3><p>Qty × harga; alokasi siklus</p></article>
+<article class="flow-step"><div class="flow-num">05</div><h3>REKAP KATEGORI</h3><p>SUMIFS / COUNTIFS</p></article>
+</div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  04</span></div></div><div class="speaker-note" hidden="">Jelaskan bahwa Master Item adalah tabel referensi. Pada tampilan latihan BQ yang dipakai sekarang, peserta mengambil Kategori dan Harga Satuan; satuan raw tetap terlihat di Raw Request bila dibutuhkan.</div></section>
+<section data-title="Kita memakai studi kasus yang sama, dengan tambahan tanggal permintaan." aria-label="Slide 5" class="slide data" data-index="4"><div class="slide-inner"><div class="slide-kicker">KENALI DATA SUMBER</div><h2>Kita memakai studi kasus yang sama, dengan tambahan tanggal permintaan.</h2><div class="slide-content"><div class="table-wrap"><table><thead><tr><th>Request ID</th><th>Nama item</th><th>Status</th><th>Tanggal</th></tr></thead><tbody><tr><td>BQ-001</td><td>W&amp;D Vacuum 22 Liter</td><td>Include</td><td>01-Nov-2026</td></tr><tr><td>BQ-002</td><td>Mop Set Biru</td><td>Include</td><td>02-Nov-2026</td></tr><tr><td>BQ-005</td><td>Microfiber Hijau</td><td>Include</td><td>05-Nov-2026</td></tr><tr><td>BQ-017</td><td>Floor Polisher</td><td>Review</td><td>17-Nov-2026</td></tr></tbody></table></div><div class="stat-callout">17 request  •  16 Include  •  1 Review</div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  05</span></div></div><div class="speaker-note" hidden="">Di sheet 01_RAW_BQ: header berada di baris 6, data baris 7–23. Kolom G adalah Status Proses dan kolom H adalah Tanggal Permintaan. BQ-017 sengaja berstatus Review dan belum ada di Master Item.</div></section>
+<section data-title="Dropdown memilih status; tanggal membatasi periode data." aria-label="Slide 6" class="slide filters" data-index="5"><div class="slide-inner"><div class="slide-kicker">TAHAP 1  •  FILTER REQUEST AKTIF</div><h2>Dropdown memilih status; tanggal membatasi periode data.</h2><div class="slide-content"><div class="filter-board"><div class="filter-fields"><div class="filter-field"><label>Status Proses</label><div class="fake-input">Semua / Include / Review</div></div><div class="filter-field"><label>Tanggal Mulai</label><div class="fake-input">01-Nov-2026</div></div><div class="filter-field"><label>Tanggal Akhir</label><div class="fake-input">30-Nov-2026</div></div></div><div class="rule-box"><span class="rule-icon">✓</span><p>Semua = abaikan kriteria status, tetapi tetap ikuti rentang tanggal.</p></div></div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  06</span></div></div><div class="speaker-note" hidden="">Demo di sheet 03_FILTERED_REQUEST. A7 adalah dropdown status; B7 tanggal mulai; C7 tanggal akhir. Pastikan daftar dropdown memuat Semua, Include, Review. Uji Semua, lalu Include, lalu Review.</div></section>
+<section data-title="IF memilih jalur filter; FILTER mengambil baris yang memenuhi kriteria." aria-label="Slide 7" class="slide formula" data-index="6"><div class="slide-inner"><div class="slide-kicker">FORMULA INTI  •  FILTER + IF</div><h2>IF memilih jalur filter; FILTER mengambil baris yang memenuhi kriteria.</h2><div class="slide-content"><div class="formula-layout"><pre class="code formula-code">=IF($A$7="Semua";
+ FILTER('01_RAW_BQ'!$A$7:$H$23;
+ ('01_RAW_BQ'!$H$7:$H$23&gt;=$B$7)*('01_RAW_BQ'!$H$7:$H$23&lt;=$C$7);
+ "Tidak ada data");
+ FILTER('01_RAW_BQ'!$A$7:$H$23;
+ ('01_RAW_BQ'!$G$7:$G$23=$A$7)*('01_RAW_BQ'!$H$7:$H$23&gt;=$B$7)*('01_RAW_BQ'!$H$7:$H$23&lt;=$C$7);
+ "Tidak ada data"))</pre><ul class="formula-points"><li>A7 = status dropdown</li><li>B7 = tanggal mulai  •  C7 = tanggal akhir</li><li>G = Status Proses  •  H = Tanggal Permintaan</li><li>Tanda * berarti semua kondisi harus terpenuhi (AND).</li></ul></div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  07</span></div></div><div class="speaker-note" hidden="">Formula dimasukkan satu kali di A10. Pastikan area A10:H26 kosong. Formula memakai pemisah titik koma sesuai pengaturan Excel pada workbook peserta. Jika pilihan Semua, IF mengarahkan ke FILTER yang hanya menggunakan tanggal. Jika Include atau Review, FILTER memakai status dan tanggal.</div></section>
+<section data-title="Perubahan kriteria langsung mengubah daftar hasil." aria-label="Slide 8" class="slide results" data-index="7"><div class="slide-inner"><div class="slide-kicker">HASIL FILTER</div><h2>Perubahan kriteria langsung mengubah daftar hasil.</h2><div class="slide-content"><div class="result-grid"><article class="result-card"><div class="result-label">Semua</div><p>01–30 Nov 2026</p><strong>17 request</strong></article><article class="result-card"><div class="result-label">Include</div><p>01–30 Nov 2026</p><strong>16 request</strong></article><article class="result-card"><div class="result-label">Review</div><p>01–30 Nov 2026</p><strong>1 request</strong></article><article class="result-card"><div class="result-label">Include</div><p>05–12 Nov 2026</p><strong>8 request</strong></article></div><div class="result-foot">Formula FILTER menghasilkan Dynamic Array / Spill Range.</div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  08</span></div></div><div class="speaker-note" hidden="">Minta peserta memperhatikan hasil yang melimpah ke kanan dan ke bawah. Jangan ketik formula di setiap sel hasil. Jika muncul #SPILL!, cek apakah area keluaran sudah kosong. Jika #VALUE!, cek kesesuaian ukuran range serta format tanggal.</div></section>
+<section data-title="Lookup mengurangi input manual dan menjaga konsistensi data." aria-label="Slide 9" class="slide lookup" data-index="8"><div class="slide-inner"><div class="slide-kicker">TAHAP 2  •  MASTER DATA LOOKUP</div><h2>Lookup mengurangi input manual dan menjaga konsistensi data.</h2><div class="slide-content">
+<div class="lookup-route"><div class="route-box"><small>RAW REQUEST</small><strong>Nama Item Raw</strong></div><div class="route-arrow"><b>XLOOKUP</b><span>→</span></div><div class="route-box highlight"><small>MASTER ITEM</small><strong>Kategori + Harga</strong></div></div>
+<div class="output-pills"><span class="output-pill">Kategori → kolom C</span><span class="output-pill">Harga Satuan → kolom E</span><span class="output-pill">Satu formula → dua kolom</span></div>
+<pre class="code compact">=IF($A7="";"";XLOOKUP($B7;'02_MASTER_ITEM'!$B$5:$B$20;HSTACK('02_MASTER_ITEM'!$C$5:$C$20;'02_MASTER_ITEM'!$E$5:$E$20);"Tidak ditemukan"))</pre></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  09</span></div></div><div class="speaker-note" hidden="">Letakkan formula di E7 saja. HSTACK menggabungkan kolom Kategori (C) dan Harga Satuan (E) dari Master Item, lalu XLOOKUP mengembalikan keduanya sekaligus ke E:F. Pastikan F7:F23 kosong agar spill tidak terhalang. HSTACK tersedia pada Excel Microsoft 365 versi baru. Jika Excel menampilkan #NAME? atau HSTACK tidak dikenal, gunakan dua XLOOKUP terpisah: satu untuk kategori di E7 (return C), satu untuk harga di F7 (return E).</div></section>
+<section data-title="Investasi awal dan alokasi bulanan menjawab dua pertanyaan berbeda." aria-label="Slide 10" class="slide calc" data-index="9"><div class="slide-inner"><div class="slide-kicker">TAHAP 3  •  HITUNG BQ</div><h2>Investasi awal dan alokasi bulanan menjawab dua pertanyaan berbeda.</h2><div class="slide-content">
+<div class="calc-layout">
+<div class="calc-facts">
+<div><small>Barang</small><strong>Mop Set Biru</strong></div>
+<div><small>Quantity (C7)</small><strong>2 Pcs</strong></div>
+<div><small>Harga satuan (F7)</small><strong>Rp95.000</strong></div>
+<div><small>Siklus (D7)</small><strong>6 bulan</strong></div>
+</div>
+<div class="calc-results">
+<div><small>Investasi awal (G7)</small><strong>Rp190.000</strong><span>2 × Rp95.000</span></div>
+<div><small>Estimasi bulanan (H7)</small><strong>Rp31.666,67</strong><span>Rp190.000 ÷ 6</span></div>
+</div>
+</div>
+<div class="formula-strip"><div><b>G7 — Investasi Awal</b><span>=IF(OR(A7="";C7="";F7="");"";C7*F7)</span></div><div><b>H7 — Estimasi Beban Bulanan (Alokasi)</b><span>=IF(OR(A7="";D7="";D7=0;G7="");"";G7/D7)</span></div></div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  10</span></div></div><div class="speaker-note" hidden="">Di layout BQ saat ini: C = Qty, D = Siklus (bulan), F = Harga Satuan, G = Investasi Awal, H = Estimasi Beban Bulanan (Alokasi). Masukkan rumus G7 dan H7, lalu copy down. IF di depan menjaga baris kosong tetap kosong; D7=0 mencegah #DIV/0!. Angka bulanan adalah alokasi simulasi investasi berdasarkan siklus, bukan recurring cost aktual untuk semua jenis barang.</div></section>
+<section data-title="IF membantu menandai baris yang masih perlu diperiksa." aria-label="Slide 11" class="slide status" data-index="10"><div class="slide-inner"><div class="slide-kicker">TAHAP 4  •  STATUS OTOMATIS</div><h2>IF membantu menandai baris yang masih perlu diperiksa.</h2><div class="slide-content">
+<div class="status-grid">
+<article class="status-card good"><strong>OK</strong><p>Kategori, harga, investasi, dan alokasi terisi</p></article>
+<article class="status-card warn"><strong>PERIKSA</strong><p>Lookup gagal atau ada kolom wajib kosong</p></article>
+<article class="status-card neutral"><strong>Kosong</strong><p>Belum ada Request ID</p></article>
+</div>
+<pre class="code compact">=IF($A7="";"";IF(OR($E7="Tidak ditemukan";$F7="";$G7="";$H7="");"PERIKSA";"OK"))</pre></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  11</span></div></div><div class="speaker-note" hidden="">Masukkan formula di I7 lalu copy down. A = Request ID, E = Kategori, F = Harga, G = Investasi Awal, H = Estimasi Beban Bulanan. Jika baris kosong, status kosong. Jika lookup tidak ditemukan atau kolom wajib kosong, PERIKSA. Jika seluruh input terisi, OK. Status OK hanya pemeriksaan kelengkapan dasar, bukan audit kewajaran harga atau qty.</div></section>
+<section data-title="SUMIFS merangkum nilai berdasarkan kategori dan status valid." aria-label="Slide 12" class="slide summary" data-index="11"><div class="slide-inner"><div class="slide-kicker">TAHAP 5  •  REKAP BQ</div><h2>SUMIFS merangkum nilai berdasarkan kategori dan status valid.</h2><div class="slide-content">
+<div class="summary-list">
+<article><div><strong>Total investasi per kategori (B6)</strong><pre class="code">=SUMIFS('04_BQ_AUTOMATED'!$G$7:$G$23;'04_BQ_AUTOMATED'!$E$7:$E$23;$A6;'04_BQ_AUTOMATED'!$I$7:$I$23;"OK")</pre></div><span>SUMIFS</span></article>
+<article><div><strong>Estimasi alokasi bulanan per kategori (C6)</strong><pre class="code">=SUMIFS('04_BQ_AUTOMATED'!$H$7:$H$23;'04_BQ_AUTOMATED'!$E$7:$E$23;$A6;'04_BQ_AUTOMATED'!$I$7:$I$23;"OK")</pre></div><span>SUMIFS</span></article>
+<article><div><strong>Jumlah item valid (D6)</strong><pre class="code">=COUNTIFS('04_BQ_AUTOMATED'!$E$7:$E$23;$A6;'04_BQ_AUTOMATED'!$I$7:$I$23;"OK")</pre></div><span>COUNTIFS</span></article>
+</div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  12</span></div></div><div class="speaker-note" hidden="">Di sheet 05_REKAP_KATEGORI, A6 berisi kategori pertama. Salin rumus B6:D6 ke bawah untuk kategori lainnya. SUMIFS menjumlahkan hanya baris dengan kategori sesuai A6 dan Status = OK. COUNTIFS menghitung jumlah baris valid. Bila alamat data BQ pada file peserta berbeda, sesuaikan baris terakhirnya.</div></section>
+<section data-title="Otomatisasi baru terbukti saat input berubah dan output ikut menyesuaikan." aria-label="Slide 13" class="slide tests" data-index="12"><div class="slide-inner"><div class="slide-kicker">UJI PERUBAHAN INPUT</div><h2>Otomatisasi baru terbukti saat input berubah dan output ikut menyesuaikan.</h2><div class="slide-content">
+<div class="test-list">
+<article><div class="test-name">Ubah dropdown status</div><div class="test-action">Semua → Include → Review</div><div class="test-result">Hasil berubah: 17 / 16 / 1</div></article>
+<article><div class="test-name">Ubah rentang tanggal</div><div class="test-action">01–30 Nov → 05–12 Nov</div><div class="test-result">Include menjadi 8 request</div></article>
+<article><div class="test-name">Tampilkan item Review</div><div class="test-action">Pilih Semua; cek BQ-017</div><div class="test-result">Floor Polisher → PERIKSA</div></article>
+<article><div class="test-name">Uji kolom kosong</div><div class="test-action">Kosongkan harga sementara</div><div class="test-result">Investasi kosong; status PERIKSA</div></article>
+</div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  13</span></div></div><div class="speaker-note" hidden="">Poin demo terpenting: pilih Semua agar BQ-017 ikut tampil. Floor Polisher memang tidak ada di Master Item sehingga lookup harus memberi pesan Tidak ditemukan dan Status menjadi PERIKSA. Kembalikan status ke Include dan tanggal 01–30 November setelah demonstrasi agar latihan kelompok kembali ke kondisi awal.</div></section>
+<section data-title="Setiap kelompok menyelesaikan alur, lalu menjelaskan satu keputusan." aria-label="Slide 14" class="slide practice" data-index="13"><div class="slide-inner"><div class="slide-kicker">PRAKTIK KELOMPOK  •  9 KELOMPOK × 5 ORANG</div><h2>Setiap kelompok menyelesaikan alur, lalu menjelaskan satu keputusan.</h2><div class="slide-content">
+<div class="practice-layout">
+<div class="roles">
+<article><div class="role-no">01</div><div><b>Operator Filter</b><p>Mengatur status dan rentang tanggal.</p></div></article>
+<article><div class="role-no">02</div><div><b>Lookup Builder</b><p>Mengisi Kategori dan Harga melalui XLOOKUP.</p></div></article>
+<article><div class="role-no">03</div><div><b>Calculator</b><p>Menghitung investasi dan alokasi bulanan.</p></div></article>
+<article><div class="role-no">04</div><div><b>Quality Checker</b><p>Menguji Status OK / PERIKSA dan data kosong.</p></div></article>
+<article><div class="role-no">05</div><div><b>Presenter</b><p>Menjelaskan hasil dan satu temuan.</p></div></article>
+</div>
+<div class="task-panel"><h3>TARGET KELOMPOK</h3><ol><li>Filter request berdasarkan status dan tanggal.</li><li>Ambil kategori dan harga dari Master Item.</li><li>Hitung G: investasi; H: alokasi bulanan.</li><li>Periksa Status di I dan rekap kategori.</li></ol></div>
+</div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  14</span></div></div><div class="speaker-note" hidden="">Untuk 9 kelompok × 5 peserta, gunakan lima peran ini. Bila waktu terbatas, kelompok tidak harus mengisi ulang semua formula dari nol jika area bantu sudah disediakan; yang penting mereka dapat menjelaskan cara kerja, mengecek output, dan menguji perubahan input.</div></section>
+<section data-title="Sesi 6 mengubah daftar permintaan menjadi Draft BQ yang bisa ditinjau." aria-label="Slide 15" class="slide closing" data-index="14"><div class="slide-inner"><div class="slide-kicker">REVIEW &amp; PENUTUP</div><h2>Sesi 6 mengubah daftar permintaan menjadi Draft BQ yang bisa ditinjau.</h2><div class="slide-content"><div class="closing-layout"><div class="takeaways"><div><span>✓</span>FILTER memilih request yang diproses.</div><div><span>✓</span>XLOOKUP melengkapi data dari Master Item.</div><div><span>✓</span>IF memeriksa kelengkapan; SUMIFS membuat rekap.</div></div><div class="next-card"><small>SELANJUTNYA</small><strong>Sesi 7: Costing, P&amp;L &amp; Reporting</strong><a class="sheet-cta" href="https://docs.google.com/spreadsheets/d/19q3t8mzQHIiDJ8Y5G79DOY054o9FGVw9/edit?usp=sharing&amp;ouid=113453549576979377139&amp;rtpof=true&amp;sd=true" rel="noopener noreferrer" target="_blank">Buka Soal Sesi 6 ↗</a></div></div></div><div class="slide-footer"><span>POST MANAGEMENT DATA</span><span>SESI 6  •  15</span></div></div><div class="speaker-note" hidden="">Tutup dengan menegaskan batas sesi. Sesi 6 menghasilkan draft BQ dan ringkasan dasar. Sesi 7 akan mengembangkan komponen manpower, material, biaya operasional, revenue, gross profit, dan gross margin.</div></section>
+  </div>
+</main>
+<footer class="controls">
+  <div class="progress-wrap"><span class="counter" id="counter">01 / 15</span><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+  <div class="keyboard-hint">Navigasi: ← → / Space · scroll untuk membaca isi</div>
+  <div class="navs"><button class="nav-btn" id="prevBtn" type="button" aria-label="Slide sebelumnya" disabled>←</button><button class="nav-btn" id="nextBtn" type="button" aria-label="Slide selanjutnya">→</button></div>
+</footer>
+<div class="note-pop" id="notePop" role="dialog" aria-modal="true" aria-labelledby="noteTitle">
+  <div class="note-card"><div class="note-head"><h3 id="noteTitle">Catatan tutor</h3><button class="quiet-btn" id="closeNotes" type="button">Tutup ✕</button></div><p id="noteText"></p></div>
+</div>
+<div class="note-pop" id="outlinePop" role="dialog" aria-modal="true" aria-labelledby="outlineTitle">
+  <div class="note-card"><div class="note-head"><h3 id="outlineTitle">Daftar materi</h3><button class="quiet-btn" id="closeOutline" type="button">Tutup ✕</button></div><div id="outlineList"></div></div>
+</div>
+<script>
+(() => {
+  const slides = Array.from(document.querySelectorAll('.presentation .slide'));
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('counter');
+  const progressFill = document.getElementById('progressFill');
+  const notesBtn = document.getElementById('notesBtn');
+  const notePop = document.getElementById('notePop');
+  const noteText = document.getElementById('noteText');
+  const noteTitle = document.getElementById('noteTitle');
+  const outlinePop = document.getElementById('outlinePop');
+  const outlineList = document.getElementById('outlineList');
+  let current = 0;
+  const pad = n => String(n).padStart(2, '0');
+
+  function updateNote() {
+    const active = slides[current];
+    noteTitle.textContent = `Catatan tutor · ${active.dataset.title || `Slide ${current+1}`}`;
+    const note = active.querySelector('.speaker-note');
+    noteText.textContent = note ? note.textContent.trim() : 'Tidak ada catatan untuk slide ini.';
+  }
+  function showSlide(index) {
+    current = Math.max(0, Math.min(slides.length - 1, index));
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === current);
+      slide.classList.toggle('exit-left', i < current);
+      slide.setAttribute('aria-hidden', i === current ? 'false' : 'true');
+      if (i === current) slide.scrollTop = 0;
+    });
+    counter.textContent = `${pad(current+1)} / ${pad(slides.length)}`;
+    progressFill.style.width = `${((current+1)/slides.length)*100}%`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === slides.length - 1;
+    document.title = `${pad(current+1)} — ${slides[current].dataset.title || 'Sesi 6'} | PMD`;
+    if (notePop.classList.contains('open')) updateNote();
+  }
+  function openNotes() { updateNote(); notePop.classList.add('open'); document.getElementById('closeNotes').focus(); }
+  function closeNotes() { notePop.classList.remove('open'); notesBtn.focus(); }
+  function openOutline() { outlinePop.classList.add('open'); document.getElementById('closeOutline').focus(); }
+  function closeOutline() { outlinePop.classList.remove('open'); document.getElementById('outlineBtn').focus(); }
+
+  prevBtn.addEventListener('click', () => showSlide(current - 1));
+  nextBtn.addEventListener('click', () => showSlide(current + 1));
+  notesBtn.addEventListener('click', openNotes);
+  document.getElementById('closeNotes').addEventListener('click', closeNotes);
+  document.getElementById('outlineBtn').addEventListener('click', openOutline);
+  document.getElementById('closeOutline').addEventListener('click', closeOutline);
+  document.getElementById('fullscreenBtn').addEventListener('click', async () => {
+    const target = document.getElementById('presentation');
+    try {
+      if (!document.fullscreenElement) await target.requestFullscreen();
+      else await document.exitFullscreen();
+    } catch (error) { alert('Mode layar penuh tidak didukung pada browser ini.'); }
+  });
+  [notePop, outlinePop].forEach(pop => pop.addEventListener('click', e => { if (e.target === pop) pop.classList.remove('open'); }));
+
+  slides.forEach((slide, index) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'outline-item';
+    btn.textContent = `${pad(index+1)}  ${slide.dataset.title || `Slide ${index+1}`}`;
+    btn.addEventListener('click', () => { showSlide(index); closeOutline(); });
+    outlineList.appendChild(btn);
+  });
+
+  document.addEventListener('keydown', e => {
+    const tag = (e.target && e.target.tagName || '').toLowerCase();
+    const typing = ['input','textarea','select'].includes(tag) || e.target?.isContentEditable;
+    if (notePop.classList.contains('open') || outlinePop.classList.contains('open')) {
+      if (e.key === 'Escape') { notePop.classList.remove('open'); outlinePop.classList.remove('open'); }
+      return;
+    }
+    if (typing) return;
+    if (['ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); showSlide(current + 1); }
+    else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); showSlide(current - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    else if (e.key === 'End') { e.preventDefault(); showSlide(slides.length - 1); }
+    else if (e.key.toLowerCase() === 'n') openNotes();
+  });
+  showSlide(0);
+})();
+</script>
+</body></html>
